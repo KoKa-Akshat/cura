@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Servo</title>
+<meta name="description" content="The repair shop for the robot age. Ship it broken, we diagnose and fix it, or you don't pay.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Expanded:wght@700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#12151A;
+  --paper:#ECEEEF;
+  --surface:#F5F6F7;
+  --line:#D4D8DA;
+  --steel:#5B646C;
+  --copper:#C86A22;
+  --copper-deep:#A8551A;
+  --signal:#1E9873;
+  --signal-deep:#167A5E;
+  --shadow: 0 1px 2px rgba(18,21,26,0.08), 0 16px 34px -18px rgba(18,21,26,0.32);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ink:#ECEEEF; --paper:#0E1114; --surface:#171B20; --line:#2A2F35; --steel:#98A1A8;
+    --copper:#F0954A; --copper-deep:#F7B172; --signal:#4FD9A8; --signal-deep:#7EE8C2;
+    --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 20px 44px -20px rgba(0,0,0,0.75);
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#ECEEEF; --paper:#0E1114; --surface:#171B20; --line:#2A2F35; --steel:#98A1A8;
+  --copper:#F0954A; --copper-deep:#F7B172; --signal:#4FD9A8; --signal-deep:#7EE8C2;
+  --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 20px 44px -20px rgba(0,0,0,0.75);
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0; background:var(--paper); color:var(--ink); font-family:"IBM Plex Sans", ui-sans-serif, system-ui, sans-serif; font-size:17px; line-height:1.62; -webkit-font-smoothing:antialiased;}
+img{max-width:100%;}
+.wrap{max-width:1120px; margin:0 auto; padding:0 28px;}
+.mono{font-family:"JetBrains Mono", ui-monospace, monospace; font-variant-numeric:tabular-nums;}
+h1,h2,h3{font-family:"Archivo Expanded", ui-sans-serif, sans-serif; font-weight:800; letter-spacing:-0.01em; margin:0; text-wrap:balance;}
+p{margin:0;}
+a{color:inherit;}
+
+/* status strip motif */
+.status-strip{display:flex; height:4px;}
+.status-strip span{flex:1; background:var(--line);}
+.status-strip span.on{background:var(--signal);}
+
+header.top{position:sticky; top:0; z-index:20; background:color-mix(in srgb, var(--paper) 90%, transparent); backdrop-filter:blur(10px); border-bottom:1px solid var(--line);}
+.nav{display:flex; align-items:center; justify-content:space-between; padding:18px 28px; max-width:1120px; margin:0 auto;}
+.wordmark{font-family:"Archivo Expanded"; font-weight:800; font-size:20px; letter-spacing:0.01em; display:flex; align-items:center; gap:9px;}
+.wordmark .dot{width:9px; height:9px; border-radius:50%; background:var(--signal); box-shadow:0 0 0 3px color-mix(in srgb, var(--signal) 25%, transparent);}
+.navlinks{display:flex; gap:26px; align-items:center;}
+.navlinks a{font-size:15px; font-weight:600; color:var(--ink); opacity:0.75; text-decoration:none;}
+.navlinks a:hover{opacity:1;}
+.btn{display:inline-flex; align-items:center; gap:8px; font-family:"IBM Plex Sans"; font-weight:700; font-size:15px; padding:12px 22px; border-radius:4px; background:var(--copper); color:#171208; text-decoration:none; box-shadow:var(--shadow); border:1px solid var(--copper-deep); transition:transform .15s ease;}
+.btn:hover{transform:translateY(-1px);}
+.btn-ghost{background:transparent; color:var(--ink); border:1.5px solid var(--line); box-shadow:none;}
+.btn-ghost:hover{border-color:var(--steel);}
+
+/* hero */
+.hero{padding:80px 0 56px; background:var(--ink); color:var(--paper); position:relative; overflow:hidden;}
+.hero::before{content:""; position:absolute; inset:0; background-image:linear-gradient(color-mix(in srgb, var(--paper) 6%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in srgb, var(--paper) 6%, transparent) 1px, transparent 1px); background-size:34px 34px; mask-image:radial-gradient(ellipse 70% 60% at 50% 20%, black, transparent);}
+.hero .wrap{position:relative;}
+.hero-copy{max-width:760px; margin:0 auto; text-align:center;}
+.eyebrow{font-family:"JetBrains Mono"; font-size:13px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:var(--copper); margin-bottom:16px; display:inline-flex; align-items:center; gap:8px;}
+.eyebrow::before{content:""; width:7px; height:7px; border-radius:50%; background:var(--signal);}
+.hero h1{font-size:clamp(34px, 5.6vw, 58px); line-height:1.04; color:var(--paper);}
+.hero h1 span{color:var(--copper);}
+.hero p.lede{margin-top:20px; font-size:19px; color:color-mix(in srgb, var(--paper) 74%, transparent); line-height:1.6; max-width:56ch; margin-left:auto; margin-right:auto;}
+.hero-ctas{display:flex; gap:14px; margin-top:30px; justify-content:center; flex-wrap:wrap;}
+.hero-ctas .btn-ghost{color:var(--paper); border-color:color-mix(in srgb, var(--paper) 30%, transparent);}
+.guarantee-line{margin-top:22px; font-family:"JetBrains Mono"; font-size:13.5px; color:var(--signal); display:flex; align-items:center; justify-content:center; gap:8px;}
+
+section{padding:72px 0;}
+.section-head{max-width:680px; margin:0 auto 40px; text-align:center;}
+.section-head h2{font-size:clamp(27px,3.2vw,38px);}
+.section-head p{margin-top:12px; color:var(--steel); font-size:17.5px; line-height:1.55;}
+
+/* stat strip */
+.stat-strip{display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:8px; overflow:hidden;}
+.stat{background:var(--surface); padding:30px 22px; text-align:center;}
+.stat .n{font-family:"JetBrains Mono"; font-size:clamp(26px,3.2vw,34px); font-weight:700; color:var(--copper);}
+.stat .l{font-size:13.5px; color:var(--steel); margin-top:8px; line-height:1.5;}
+
+/* ticket flow */
+.tickets{display:grid; grid-template-columns:repeat(4,1fr); gap:14px;}
+.ticket{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:24px 20px; position:relative;}
+.ticket::before{content:attr(data-n); position:absolute; top:-11px; left:18px; font-family:"JetBrains Mono"; font-size:11px; font-weight:700; background:var(--ink); color:var(--paper); padding:3px 9px; border-radius:4px;}
+.ticket h4{font-size:16.5px; font-weight:700; margin-top:6px; font-family:"IBM Plex Sans";}
+.ticket p{margin-top:8px; font-size:14px; color:var(--steel); line-height:1.55;}
+.ticket .status{margin-top:14px; font-family:"JetBrains Mono"; font-size:11px; font-weight:600; letter-spacing:0.04em; text-transform:uppercase; color:var(--signal); display:flex; align-items:center; gap:6px;}
+.ticket .status::before{content:""; width:6px; height:6px; border-radius:50%; background:var(--signal);}
+
+/* platforms */
+.platform-grid{display:flex; flex-wrap:wrap; gap:10px; justify-content:center;}
+.platform-pill{font-family:"JetBrains Mono"; font-size:13.5px; font-weight:600; padding:9px 16px; border-radius:100px; border:1px solid var(--line); background:var(--surface); color:var(--ink);}
+.platform-note{margin-top:22px; text-align:center; font-size:14px; color:var(--steel); max-width:60ch; margin-left:auto; margin-right:auto;}
+
+/* nepal */
+.nepal-band{background:var(--surface); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+.nepal-grid{display:grid; grid-template-columns:1fr 1fr; gap:44px; align-items:center;}
+.nepal-stats{display:flex; flex-direction:column; gap:0;}
+.nepal-stat{padding:18px 0; border-top:1px solid var(--line); display:flex; justify-content:space-between; align-items:baseline; gap:16px;}
+.nepal-stat:last-child{border-bottom:1px solid var(--line);}
+.nepal-stat .n{font-family:"JetBrains Mono"; font-size:22px; font-weight:700; color:var(--copper); white-space:nowrap;}
+.nepal-stat .l{font-size:14px; color:var(--steel); text-align:right;}
+
+/* guarantee band */
+.guarantee-band{background:var(--ink); color:var(--paper); text-align:center;}
+.guarantee-band .eyebrow{color:var(--signal);}
+.guarantee-band h2{color:var(--paper); font-size:clamp(28px,3.4vw,40px);}
+.guarantee-band p{margin-top:14px; color:color-mix(in srgb, var(--paper) 72%, transparent); font-size:17px; max-width:56ch; margin-left:auto; margin-right:auto; line-height:1.6;}
+
+/* timing */
+.timing-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:16px;}
+.timing-card{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:24px;}
+.timing-card .tag{font-family:"JetBrains Mono"; font-size:11.5px; font-weight:700; color:var(--signal); letter-spacing:0.05em; text-transform:uppercase;}
+.timing-card p{margin-top:10px; font-size:14.5px; color:var(--steel); line-height:1.6;}
+
+.final-cta{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:56px 40px; text-align:center; box-shadow:var(--shadow);}
+.final-cta h2{font-size:clamp(26px,3.2vw,38px);}
+.final-cta p{margin-top:12px; color:var(--steel); font-size:16.5px;}
+.final-cta .hero-ctas{margin-top:26px;}
+.final-cta .hero-ctas .btn-ghost{color:var(--ink); border-color:var(--line);}
+
+footer{border-top:1px solid var(--line); padding:32px 0 44px;}
+.foot-grid{display:flex; justify-content:space-between; align-items:flex-start; gap:24px; flex-wrap:wrap;}
+.foot-note{font-size:13.5px; color:var(--steel); max-width:56ch; line-height:1.6;}
+.foot-links{display:flex; gap:18px; font-size:14.5px; color:var(--steel);}
+.foot-links a{text-decoration:none;}
+.foot-links a:hover{color:var(--ink);}
+
+@media (max-width: 860px){
+  .tickets{grid-template-columns:1fr 1fr;}
+  .nepal-grid{grid-template-columns:1fr;}
+  .stat-strip{grid-template-columns:1fr;}
+  .timing-grid{grid-template-columns:1fr;}
+  .final-cta{padding:40px 24px;}
+}
+@media (max-width: 600px){
+  .wrap{padding:0 20px;}
+  .navlinks{display:none;}
+  .tickets{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<div class="status-strip"><span class="on"></span><span class="on"></span><span class="on"></span><span></span><span></span></div>
+<header class="top">
+  <div class="nav">
+    <div class="wordmark"><span class="dot"></span> Servo</div>
+    <nav class="navlinks">
+      <a href="#how">How it works</a>
+      <a href="#platforms">What we fix</a>
+      <a href="#nepal">Why Nepal</a>
+    </nav>
+    <a href="#how" class="btn">Ship a repair</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-copy">
+    <div class="eyebrow">The repair shop for the robot age</div>
+    <h1>Everyone's racing to build robots. <span>Almost nobody's racing to fix them.</span></h1>
+    <p class="lede">Ship us your broken robot, drone, or robot arm. Our engineers diagnose and repair it. If we can't fix it, you don't pay, and we ship it back anyway.</p>
+    <div class="hero-ctas">
+      <a href="#how" class="btn">Ship a repair</a>
+      <a href="#platforms" class="btn btn-ghost">What we fix</a>
+    </div>
+    <div class="guarantee-line">NO FIX, NO CHARGE. EVERY TIME.</div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">The market</div>
+      <h2>The robot population is about to explode</h2>
+    </div>
+    <div class="stat-strip">
+      <div class="stat"><div class="n mono">$3&ndash;4B</div><div class="l">humanoid robot market, 2026</div></div>
+      <div class="stat"><div class="n mono">$12&ndash;15B</div><div class="l">projected by 2030, roughly 39% CAGR</div></div>
+      <div class="stat"><div class="n mono">0</div><div class="l">mail-in repair services built for consumer and prosumer robots today</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="how" style="background:var(--surface); border-top:1px solid var(--line); border-bottom:1px solid var(--line);">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">How it works</div>
+      <h2>Four steps. No shop visit, no diagnosis fee.</h2>
+    </div>
+    <div class="tickets">
+      <div class="ticket" data-n="01">
+        <h4>Ship it</h4>
+        <p>Print a prepaid label, box it up, send it in. Any platform, any condition.</p>
+        <div class="status">Received</div>
+      </div>
+      <div class="ticket" data-n="02">
+        <h4>We diagnose it</h4>
+        <p>A real engineer opens a ticket, runs diagnostics, and tells you exactly what's wrong before touching anything.</p>
+        <div class="status">Diagnosed</div>
+      </div>
+      <div class="ticket" data-n="03">
+        <h4>We fix it</h4>
+        <p>Approved repairs get fixed. If we can't fix it, or you say no, you pay nothing.</p>
+        <div class="status">Repaired</div>
+      </div>
+      <div class="ticket" data-n="04">
+        <h4>It ships back</h4>
+        <p>Tested, logged, and on its way back to you, working or not, at our cost either way.</p>
+        <div class="status">Returned</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="platforms">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">What we fix</div>
+      <h2>If it has a motor, a board, or a battery, we'll take a look</h2>
+    </div>
+    <div class="platform-grid">
+      <span class="platform-pill">Unitree G1</span>
+      <span class="platform-pill">SO-100 / SO-101</span>
+      <span class="platform-pill">Koch v1.1</span>
+      <span class="platform-pill">LeKiwi</span>
+      <span class="platform-pill">Reachy 2</span>
+      <span class="platform-pill">ALOHA / ViperX</span>
+      <span class="platform-pill">ROS 2 platforms</span>
+      <span class="platform-pill">Consumer drones</span>
+      <span class="platform-pill">Robot arms</span>
+      <span class="platform-pill">Something else entirely</span>
+    </div>
+    <p class="platform-note">Don't see yours listed. Ship it anyway. Every diagnosis starts free, and we'll tell you honestly if it's outside what we can repair.</p>
+  </div>
+</section>
+
+<section id="nepal" class="nepal-band">
+  <div class="wrap nepal-grid">
+    <div>
+      <div class="eyebrow">Why Nepal</div>
+      <h2>A real engineering talent base, not a cost-cutting story</h2>
+      <p style="margin-top:16px; color:var(--steel); font-size:16px; line-height:1.65;">Nepal's technical education is taught in English, its IT sector has grown over 60% in recent years, and it already has a real robotics and STEAM education pipeline. We're not routing around expertise to save money. We're building where the expertise already is.</p>
+    </div>
+    <div class="nepal-stats">
+      <div class="nepal-stat"><div class="n">#19</div><div class="l">globally in outsourcing competitiveness</div></div>
+      <div class="nepal-stat"><div class="n">64%+</div><div class="l">recent growth in Nepal's IT sector</div></div>
+      <div class="nepal-stat"><div class="n">96/100</div><div class="l">labor cost competitiveness score, ahead of the US, Germany, and the UK</div></div>
+      <div class="nepal-stat"><div class="n">2020&ndash;</div><div class="l">RoboTech Nepal has run robotics and electronics education nationwide</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="guarantee-band">
+  <div class="wrap">
+    <div class="eyebrow">The guarantee</div>
+    <h2>If we can't fix it, it's free.</h2>
+    <p>No diagnosis fee. No restocking fee. No "well, we tried" invoice. If your robot leaves in the same condition it arrived, you owe us nothing, and we still ship it home.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Why now</div>
+      <h2>The rules are changing in our favor</h2>
+    </div>
+    <div class="timing-grid">
+      <div class="timing-card">
+        <div class="tag mono">EU Right to Repair Directive</div>
+        <p>Takes effect July 31, 2026. Manufacturers will be required to make diagnostic tools, repair manuals, and genuine parts available to independent repair shops, not just their own service centers.</p>
+      </div>
+      <div class="timing-card">
+        <div class="tag mono">US state right-to-repair laws</div>
+        <p>California, Minnesota, New York, Colorado, and Oregon already require it. Connecticut and Texas land in 2026. The legal path to third-party repair is opening state by state.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="final-cta">
+      <h2>Your robot's going to break. We'll be ready.</h2>
+      <p>Get on the list for early access, or send us the robot that's already broken.</p>
+      <div class="hero-ctas">
+        <a href="#" class="btn">Ship a repair</a>
+        <a href="#" class="btn btn-ghost">Get early access</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-grid">
+    <div class="foot-note">Servo is a pre-launch company. Repair turnaround times, supported platforms, and pricing will be confirmed as the first repair hub comes online.</div>
+    <div class="foot-links">
+      <a href="#how">How it works</a>
+      <a href="#platforms">What we fix</a>
+      <a href="#nepal">Why Nepal</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
