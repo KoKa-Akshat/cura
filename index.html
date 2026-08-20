@@ -112,6 +112,26 @@ section{padding:72px 0;}
 .stat .n{font-family:"JetBrains Mono"; font-size:clamp(26px,3.2vw,34px); font-weight:700; color:var(--copper);}
 .stat .l{font-size:13.5px; color:var(--steel); margin-top:8px; line-height:1.5;}
 
+/* scroll panel — sticky graph visual + steps that light up as they scroll into view */
+.scroll-panel{display:grid; grid-template-columns:0.85fr 1.15fr; gap:48px; align-items:start;}
+.scroll-panel-visual{position:sticky; top:96px; height:min(70vh,520px); border-radius:10px; overflow:hidden; background:var(--ink); box-shadow:var(--shadow);}
+.scroll-panel-visual canvas{position:absolute; inset:0; width:100%; height:100%; display:block;}
+.sp-label{position:absolute; left:20px; right:20px; bottom:20px; z-index:2; font-family:"JetBrains Mono"; font-size:12px; font-weight:600; letter-spacing:0.04em; color:var(--paper); background:rgba(14,17,20,0.55); backdrop-filter:blur(6px); padding:11px 15px; border-radius:6px; border:1px solid rgba(236,238,239,0.12);}
+.sp-label b{color:var(--signal);}
+.step-box{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:28px 24px; margin-bottom:15vh; opacity:0.45; transform:scale(0.97); transition:opacity .4s ease, transform .4s ease, box-shadow .4s ease, border-color .4s ease; position:relative;}
+.step-box::before{content:attr(data-n); position:absolute; top:-11px; left:18px; font-family:"JetBrains Mono"; font-size:11px; font-weight:700; background:var(--ink); color:var(--paper); padding:3px 9px; border-radius:4px;}
+.step-box.is-active{opacity:1; transform:scale(1); box-shadow:var(--shadow); border-color:var(--copper);}
+.step-box:last-child{margin-bottom:0;}
+.step-box h4{font-size:16.5px; font-weight:700; margin-top:6px; font-family:"IBM Plex Sans";}
+.step-box p{margin-top:8px; font-size:14px; color:var(--steel); line-height:1.55;}
+.step-box .status{margin-top:14px; font-family:"JetBrains Mono"; font-size:11px; font-weight:600; letter-spacing:0.04em; text-transform:uppercase; color:var(--signal); display:flex; align-items:center; gap:6px;}
+.step-box .status::before{content:""; width:6px; height:6px; border-radius:50%; background:var(--signal);}
+@media (max-width: 860px){
+  .scroll-panel{grid-template-columns:1fr;}
+  .scroll-panel-visual{position:relative; top:0; height:280px; margin-bottom:20px;}
+  .step-box{margin-bottom:20px; opacity:1; transform:none;}
+}
+
 /* consult banner */
 .consult-banner{display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap; background:var(--ink); color:var(--paper); border-radius:8px; padding:26px 28px; margin-bottom:32px;}
 .consult-banner .cb-copy .tag{font-family:"JetBrains Mono"; font-size:11.5px; font-weight:700; color:var(--signal); letter-spacing:0.06em; text-transform:uppercase;}
@@ -276,26 +296,32 @@ footer{border-top:1px solid var(--line); padding:32px 0 44px;}
       <a href="https://calendly.com/akoirala-uuu/cura-repair-consult" class="btn" target="_blank" rel="noopener">Book your free consult</a>
     </div>
 
-    <div class="tickets">
-      <div class="ticket" data-n="01">
-        <h4>Ship it</h4>
-        <p>After your consult, box it up and send it to us at 428 Everett St, El Cerrito, CA 94530. Shipping to us is on you for now, we're working on covering this.</p>
-        <div class="status">Received</div>
+    <div class="scroll-panel">
+      <div class="scroll-panel-visual">
+        <canvas id="spCanvas"></canvas>
+        <div class="sp-label" id="spLabel">Status: <b>Received</b></div>
       </div>
-      <div class="ticket" data-n="02">
-        <h4>We diagnose it</h4>
-        <p>A real engineer opens a ticket, runs diagnostics, and tells you exactly what's wrong before touching anything.</p>
-        <div class="status">Diagnosed</div>
-      </div>
-      <div class="ticket" data-n="03">
-        <h4>We fix it</h4>
-        <p>Approved repairs get fixed by our engineers in Nepal. If we can't fix it, or you say no, you pay nothing.</p>
-        <div class="status">Repaired</div>
-      </div>
-      <div class="ticket" data-n="04">
-        <h4>It ships back</h4>
-        <p>Tested, logged, and on its way home, working or not. About a week for now while we build out the pipeline, we're working to cut that down.</p>
-        <div class="status">Returned</div>
+      <div class="scroll-panel-steps">
+        <div class="step-box" data-n="01" data-status="Received">
+          <h4>Ship it</h4>
+          <p>After your consult, box it up and send it to us at 428 Everett St, El Cerrito, CA 94530. Shipping to us is on you for now, we're working on covering this.</p>
+          <div class="status">Received</div>
+        </div>
+        <div class="step-box" data-n="02" data-status="Diagnosed">
+          <h4>We diagnose it</h4>
+          <p>A real engineer opens a ticket, runs diagnostics, and tells you exactly what's wrong before touching anything.</p>
+          <div class="status">Diagnosed</div>
+        </div>
+        <div class="step-box" data-n="03" data-status="Repaired">
+          <h4>We fix it</h4>
+          <p>Approved repairs get fixed by our engineers in Nepal. If we can't fix it, or you say no, you pay nothing.</p>
+          <div class="status">Repaired</div>
+        </div>
+        <div class="step-box" data-n="04" data-status="Returned">
+          <h4>It ships back</h4>
+          <p>Tested, logged, and on its way home, working or not. About a week for now while we build out the pipeline, we're working to cut that down.</p>
+          <div class="status">Returned</div>
+        </div>
       </div>
     </div>
   </div>
@@ -389,6 +415,134 @@ footer{border-top:1px solid var(--line); padding:32px 0 44px;}
     </div>
   </div>
 </footer>
+
+<script>
+(function(){
+  var canvas = document.getElementById('spCanvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var wrap = canvas.parentElement;
+  var W, H, dpr;
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var isDark = function(){
+    var root = document.documentElement;
+    if (root.dataset.theme === 'dark') return true;
+    if (root.dataset.theme === 'light') return false;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  };
+  var colors = function(){
+    return {
+      node: '#5B646C',
+      edge: 'rgba(120,130,140,0.18)',
+      hub: '#F0954A',
+      hubGlow: 'rgba(240,149,74,0.35)',
+      active: '#4FD9A8',
+      activeGlow: 'rgba(79,217,168,0.45)'
+    };
+  };
+
+  var N = 34;
+  var pts = [];
+  var hubs = []; // indices into pts, one per step
+
+  function resize(){
+    var r = wrap.getBoundingClientRect();
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = r.width; H = r.height;
+    canvas.width = W * dpr; canvas.height = H * dpr;
+    canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+
+  function init(){
+    pts = [];
+    for (var i=0;i<N;i++){
+      pts.push({
+        x: Math.random()*W, y: Math.random()*H,
+        vx: (Math.random()-0.5)*0.18, vy: (Math.random()-0.5)*0.18
+      });
+    }
+    var steps = document.querySelectorAll('.step-box');
+    hubs = [];
+    for (var s=0; s<steps.length; s++){
+      hubs.push(Math.floor((s+0.5) * (N/steps.length)));
+    }
+  }
+
+  var activeStep = 0;
+
+  function draw(){
+    var c = colors();
+    ctx.clearRect(0,0,W,H);
+    // edges
+    for (var i=0;i<pts.length;i++){
+      for (var j=i+1;j<pts.length;j++){
+        var dx = pts[i].x-pts[j].x, dy = pts[i].y-pts[j].y;
+        var d = Math.sqrt(dx*dx+dy*dy);
+        if (d < 110){
+          ctx.strokeStyle = c.edge;
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(pts[i].x, pts[i].y);
+          ctx.lineTo(pts[j].x, pts[j].y);
+          ctx.stroke();
+        }
+      }
+    }
+    // nodes
+    for (var k=0;k<pts.length;k++){
+      var hubIndex = hubs.indexOf(k);
+      var isActiveHub = hubIndex === activeStep;
+      var isHub = hubIndex !== -1;
+      var r = isActiveHub ? 6 : (isHub ? 4 : 2.2);
+      if (isActiveHub){
+        ctx.fillStyle = c.activeGlow;
+        ctx.beginPath(); ctx.arc(pts[k].x, pts[k].y, r*3, 0, Math.PI*2); ctx.fill();
+      } else if (isHub){
+        ctx.fillStyle = c.hubGlow;
+        ctx.beginPath(); ctx.arc(pts[k].x, pts[k].y, r*2, 0, Math.PI*2); ctx.fill();
+      }
+      ctx.fillStyle = isActiveHub ? c.active : (isHub ? c.hub : c.node);
+      ctx.beginPath(); ctx.arc(pts[k].x, pts[k].y, r, 0, Math.PI*2); ctx.fill();
+    }
+  }
+
+  function step(){
+    for (var i=0;i<pts.length;i++){
+      pts[i].x += pts[i].vx; pts[i].y += pts[i].vy;
+      if (pts[i].x < 0 || pts[i].x > W) pts[i].vx *= -1;
+      if (pts[i].y < 0 || pts[i].y > H) pts[i].vy *= -1;
+    }
+    draw();
+    if (!reduceMotion) requestAnimationFrame(step);
+  }
+
+  resize();
+  init();
+  draw();
+  if (!reduceMotion) requestAnimationFrame(step);
+  window.addEventListener('resize', function(){ resize(); });
+
+  var label = document.getElementById('spLabel');
+  var stepBoxes = document.querySelectorAll('.step-box');
+  var observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      var box = entry.target;
+      if (entry.isIntersecting){
+        box.classList.add('is-active');
+        var idx = Array.prototype.indexOf.call(stepBoxes, box);
+        activeStep = idx;
+        if (label) label.innerHTML = 'Status: <b>' + box.dataset.status + '</b>';
+        if (reduceMotion) draw();
+      } else {
+        box.classList.remove('is-active');
+      }
+    });
+  }, { root: null, threshold: 0.5 });
+  stepBoxes.forEach(function(box){ observer.observe(box); });
+})();
+</script>
 
 </body>
 </html>
