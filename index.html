@@ -81,6 +81,12 @@ header.top{position:sticky; top:0; z-index:20; background:color-mix(in srgb, var
 .hero-ctas{display:flex; gap:14px; margin-top:30px; justify-content:center; flex-wrap:wrap;}
 .hero-ctas .btn-ghost{color:var(--paper); border-color:color-mix(in srgb, var(--paper) 30%, transparent);}
 .guarantee-line{margin-top:22px; font-family:"JetBrains Mono"; font-size:13.5px; color:var(--signal); display:flex; align-items:center; justify-content:center; gap:8px;}
+.relatable-list{list-style:none; margin:22px 0 0; padding:0; display:flex; flex-direction:column; gap:9px; align-items:center;}
+.relatable-list li{font-size:17px; color:color-mix(in srgb, var(--paper) 82%, transparent); line-height:1.4;}
+.relatable-list li b{color:var(--copper); font-weight:700;}
+@media (max-width: 600px){
+  .relatable-list li{font-size:15.5px;}
+}
 
 section{padding:72px 0;}
 .section-head{max-width:680px; margin:0 auto 40px; text-align:center;}
@@ -231,7 +237,12 @@ footer{border-top:1px solid var(--line); padding:32px 0 44px;}
   <div class="wrap hero-copy">
     <div class="eyebrow">Cura &middot; care, and it sounds like cure</div>
     <h1>You grew up with it. <span>Don't say goodbye to it.</span></h1>
-    <p class="lede">It was there for the first steps. The school run. The years nobody else noticed. When it breaks, you're not losing a machine. You're losing a witness. We don't treat it like a repair ticket. We treat it like something worth saving, because it is. Ship it to us. We work on it like it's ours too. If we can't bring it back, you don't pay, and it comes home anyway.</p>
+    <ul class="relatable-list">
+      <li>Like <b>the laptop that got you through college.</b></li>
+      <li>Like <b>the car that taught you to drive.</b></li>
+      <li>Like <b>the one thing that's moved with you every time you did.</b></li>
+    </ul>
+    <p class="lede">Now picture that as a robot, and it just broke. That's not hardware failing. That's something you can't just replace. Ship it to us. We work on it like it's ours too. If we can't bring it back, you don't pay, and it comes home anyway.</p>
     <div class="hero-ctas">
       <a href="https://calendly.com/akoirala-uuu/cura-repair-consult" class="btn" target="_blank" rel="noopener">Book your free consult</a>
       <a href="#platforms" class="btn btn-ghost">What we care for</a>
