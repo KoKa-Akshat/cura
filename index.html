@@ -104,6 +104,13 @@ section{padding:72px 0;}
 .stat .n{font-family:"JetBrains Mono"; font-size:clamp(26px,3.2vw,34px); font-weight:700; color:var(--copper);}
 .stat .l{font-size:13.5px; color:var(--steel); margin-top:8px; line-height:1.5;}
 
+/* consult banner */
+.consult-banner{display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap; background:var(--ink); color:var(--paper); border-radius:8px; padding:26px 28px; margin-bottom:32px;}
+.consult-banner .cb-copy .tag{font-family:"JetBrains Mono"; font-size:11.5px; font-weight:700; color:var(--signal); letter-spacing:0.06em; text-transform:uppercase;}
+.consult-banner h4{font-size:19px; font-weight:700; color:var(--paper); margin-top:6px; font-family:"IBM Plex Sans";}
+.consult-banner p{margin-top:4px; font-size:14px; color:color-mix(in srgb, var(--paper) 74%, transparent);}
+.consult-banner .btn{flex-shrink:0;}
+
 /* ticket flow */
 .tickets{display:grid; grid-template-columns:repeat(4,1fr); gap:14px;}
 .ticket{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:24px 20px; position:relative;}
@@ -178,7 +185,7 @@ footer{border-top:1px solid var(--line); padding:32px 0 44px;}
       <a href="#platforms">What we fix</a>
       <a href="#nepal">Why Nepal</a>
     </nav>
-    <a href="#how" class="btn">Send it home to us</a>
+    <a href="#how" class="btn">Book your free consult</a>
   </div>
 </header>
 
@@ -186,9 +193,9 @@ footer{border-top:1px solid var(--line); padding:32px 0 44px;}
   <div class="wrap hero-copy">
     <div class="eyebrow">Cura &middot; care, and it sounds like cure</div>
     <h1>You grew up with it. <span>Don't say goodbye to it.</span></h1>
-    <p class="lede">It was there for the first steps, the school run, the years nobody else noticed. When it breaks, that's not just hardware failing, it's something you can't just replace. Ship it to us. We repair it like it's ours too. If we can't, you don't pay, and it still comes home.</p>
+    <p class="lede">It was there for the first steps. The school run. The years nobody else noticed. When it breaks, you're not losing a machine. You're losing a witness. We don't treat it like a repair ticket. We treat it like something worth saving, because it is. Ship it to us. We work on it like it's ours too. If we can't bring it back, you don't pay, and it comes home anyway.</p>
     <div class="hero-ctas">
-      <a href="#how" class="btn">Send it home to us</a>
+      <a href="#how" class="btn">Book your free consult</a>
       <a href="#platforms" class="btn btn-ghost">What we care for</a>
     </div>
     <div class="guarantee-line">CARED FOR, EITHER WAY. NO FIX, NO CHARGE.</div>
@@ -239,12 +246,22 @@ footer{border-top:1px solid var(--line); padding:32px 0 44px;}
   <div class="wrap">
     <div class="section-head">
       <div class="eyebrow">How it works</div>
-      <h2>Four steps. We treat it like it's ours.</h2>
+      <h2>Five steps. We treat it like it's ours.</h2>
     </div>
+
+    <div class="consult-banner">
+      <div class="cb-copy">
+        <div class="tag">Start here &middot; free, 15 minutes</div>
+        <h4>Book a consult before you ship anything</h4>
+        <p>Tell us what's wrong. We'll tell you honestly if we can help before you box it up.</p>
+      </div>
+      <a href="#" class="btn">Book your free consult</a>
+    </div>
+
     <div class="tickets">
       <div class="ticket" data-n="01">
         <h4>Ship it</h4>
-        <p>Print a prepaid label, box it up, send it in. Any platform, any condition.</p>
+        <p>After your consult, box it up and send it to us at 428 Everett St, El Cerrito, CA 94530. Shipping to us is on you for now, we're working on covering this.</p>
         <div class="status">Received</div>
       </div>
       <div class="ticket" data-n="02">
@@ -254,12 +271,12 @@ footer{border-top:1px solid var(--line); padding:32px 0 44px;}
       </div>
       <div class="ticket" data-n="03">
         <h4>We fix it</h4>
-        <p>Approved repairs get fixed. If we can't fix it, or you say no, you pay nothing.</p>
+        <p>Approved repairs get fixed by our engineers in Nepal. If we can't fix it, or you say no, you pay nothing.</p>
         <div class="status">Repaired</div>
       </div>
       <div class="ticket" data-n="04">
         <h4>It ships back</h4>
-        <p>Tested, logged, and on its way back to you, working or not, at our cost either way.</p>
+        <p>Tested, logged, and on its way home, working or not. About a week for now while we build out the pipeline, we're working to cut that down.</p>
         <div class="status">Returned</div>
       </div>
     </div>
@@ -335,9 +352,9 @@ footer{border-top:1px solid var(--line); padding:32px 0 44px;}
   <div class="wrap">
     <div class="final-cta">
       <h2>It's not done yet. Neither are we.</h2>
-      <p>Get on the list for early access, or send us the one that's already broken.</p>
+      <p>Book a free consult, or get on the list for early access.</p>
       <div class="hero-ctas">
-        <a href="#" class="btn">Send it home to us</a>
+        <a href="#" class="btn">Book your free consult</a>
         <a href="#" class="btn btn-ghost">Get early access</a>
       </div>
     </div>
